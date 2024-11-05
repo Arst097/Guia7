@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Entrenamiento - FIT UMB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- <link href="../CSS/style.css" rel="stylesheet"> -->
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FFA500;
+            --accent-color: #FF6347;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --white: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 60px;
+        }
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+        }
+        .top-bar .logo {
+            height: 40px;
+            width: auto;
+        }
+        .toggle-sidebar {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: var(--white);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: -250px;
+            top: 60px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        .user-profile {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        .user-name {
+            font-weight: 600;
+        }
+        .nav-links {
+            list-style: none;
+            margin-top: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .nav-links li:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-color);
+        }
+        .logout {
+            margin-top: auto;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .logout:hover {
+            color: var(--primary-color);
+        }
+        .sidebar nav {
+            flex-grow: 1;
+        }
+        main {
+            flex-grow: 1;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .progress-section {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+        }
+        .circular-progress {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        .circular-progress .inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .circular-progress .number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .circular-progress .label {
+            font-size: 0.7rem;
+            color: var(--text-color);
+        }
+        .streak {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+        .next-training {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .next-training h2 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        .next-training-date {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .routine {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .exercise {
+            margin-bottom: 1rem;
+        }
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border-radius: 10px;
+        }
+        .exercise-content {
+            display: none;
+            padding: 1rem;
+            background-color: var(--white);
+            border-radius: 0 0 10px 10px;
+        }
+        .exercise-content.active {
+            display: block;
+        }
+        .exercise-details {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .exercise-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .exercise-description {
+            flex-grow: 1;
+        }
+        .exercise-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        .exercise-stat {
+            text-align: center;
+        }
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-wrapper label {
+            margin-left: 0.5rem;
+        }
+        .calendar-section {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+        .calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .calendar th, .calendar td {
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .calendar .today {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+        .calendar .training-day {
+            background-color: #c8e6c9;
+            color: var(--text-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+        }
+        footer {
+            background-color: var(--text-color);
+            color: var(--white);
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+        @media (min-width: 1024px) {
+            main {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button class="toggle-sidebar">☰</button>
+        <img src="https://gust-production.s3.amazonaws.com/uploads/startup/logo_image/778857/1024px.png" class="logo">
+    </div>
+    <aside class="sidebar">
+        <div class="user-profile">
+            <img src="https://cdn.icon-icons.com/icons2/2985/PNG/512/profile_female_user_woman_icon_187166.png" alt="User Avatar" class="user-avatar">
+            <p class="user-name">Lina Maria</p>
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="nutricion.html">Nutrición</a></li>
+                <li><a href="entrenamiento.html" class="active">Entrenamiento</a></li>
+                <li><a href="home.html" class="logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <h1>Mi Entrenamiento</h1>
+        <section class="progress-section">
+            <div class="circular-progress">
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <circle cx="75" cy="75" r="65" fill="none" stroke="#e0e0e0" stroke-width="10"/>
+                    <circle cx="75" cy="75" r="65" fill="none" stroke="var(--primary-color)" stroke-width="10"
+                            stroke-dasharray="408" stroke-dashoffset="204"/>
+                </svg>
+                <div class="inner">
+                    <span class="number">1/2</span>
+                    <span class="label">Días completados</span>
+                </div>
+            </div>
+            <p class="streak">¡Llevas una racha de 3 semanas!</p>
+        </section>
+
+        <section class="next-training">
+            <h2>Próximo día de Entrenamiento</h2>
+            <p class="next-training-date">15 de Junio</p>
+        </section>
+
+        <section class="routine">
+            <h2>Rutina del Día</h2>
+            <div class="exercise">
+                <div class="exercise-header">
+                    <h3>Calentamiento</h3>
+                    <span>▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="exercise-details">
+                        <img src="https://www.50dominadas.com/images/content/elcalentamiento_2.jpg" alt="Calentamiento" class="exercise-image">
+                        <div class="exercise-description">
+                            <h4>Estiramientos generales</h4>
+                            <p>Realiza estiramientos suaves de todo el cuerpo para prepararte para el entrenamiento.</p>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="calentamiento-check">
+                                <label for="calentamiento-check">Completado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-stats">
+                        <div class="exercise-stat">
+                            <h5>Series</h5>
+                            <p>1 serie</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Repeticiones</h5>
+                            <p>10 rep.</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Tiempo de descanso</h5>
+                            <p>0 min.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise">
+                <div class="exercise-header">
+                    <h3>Ejercicio 1</h3>
+                    <span>▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="exercise-details">
+                        <img src="https://us.123rf.com/450wm/artinspiring/artinspiring1903/artinspiring190300885/119488342-hombre-haciendo-sentadillas-ejercicio-para-gl%C3%BAteos-entrenamiento-de-piernas.jpg" alt="Sentadillas" class="exercise-image">
+                        <div class="exercise-description">
+                            <h4>Sentadillas</h4>
+                            <p>Realiza sentadillas manteniendo la espalda recta y los pies separados al ancho de los hombros.</p>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="ejercicio1-check">
+                                <label for="ejercicio1-check">Completado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-stats">
+                        <div class="exercise-stat">
+                            <h5>Series</h5>
+                            <p>3 series</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Repeticiones</h5>
+                            <p>12 rep.</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Tiempo de descanso</h5>
+                            <p>1 min.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise">
+                <div class="exercise-header">
+                    <h3>Ejercicio 2</h3>
+                    <span>▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="exercise-details">
+                        <img src="https://www.entrenamientos.com/media/cache/exercise_375/uploads/exercise/flexiones-de-brazos-init-pos-8882.png" alt="Flexiones" class="exercise-image">
+                        <div class="exercise-description">
+                            <h4>Flexiones</h4>
+                            <p>Realiza flexiones manteniendo el cuerpo recto y bajando el pecho hasta casi tocar el suelo.</p>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="ejercicio2-check">
+                                <label for="ejercicio2-check">Completado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-stats">
+                        <div class="exercise-stat">
+                            <h5>Series</h5>
+                            <p>3  series</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Repeticiones</h5>
+                            <p>10 rep.</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Tiempo de descanso</h5>
+                            <p>1 min.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise">
+                <div class="exercise-header">
+                    <h3>Ejercicio 3</h3>
+                    <span>▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="exercise-details">
+                        <img src="https://www.entrenamientos.com/media/cache/exercise_375/uploads/exercise/plancha-con-apoyo-de-antebrazos-init-pos-4575.png" alt="Plancha" class="exercise-image">
+                        <div class="exercise-description">
+                            <h4>Plancha</h4>
+                            <p>Mantén la posición de plancha con el cuerpo recto y los codos apoyados en el suelo.</p>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="ejercicio3-check">
+                                <label for="ejercicio3-check">Completado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-stats">
+                        <div class="exercise-stat">
+                            <h5>Series</h5>
+                            <p>3 series</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Repeticiones</h5>
+                            <p>30 seg.</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Tiempo de descanso</h5>
+                            <p>1 min.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="exercise">
+                <div class="exercise-header">
+                    <h3>Enfriamiento</h3>
+                    <span>▼</span>
+                </div>
+                <div class="exercise-content">
+                    <div class="exercise-details">
+                        <img src="https://www.entrenamientos.com/media/cache/exercise_750/uploads/exercise/estiramiento-paravertebrales-y-dorsales-init-pos-6665.png" alt="Estiramientos" class="exercise-image">
+                        <div class="exercise-description">
+                            <h4>Estiramientos finales</h4>
+                            <p>Realiza estiramientos suaves de todo el cuerpo para relajar los músculos después del entrenamiento.</p>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="enfriamiento-check">
+                                <label for="enfriamiento-check">Completado</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-stats">
+                        <div class="exercise-stat">
+                            <h5>Series</h5>
+                            <p>1 serie</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Repeticiones</h5>
+                            <p>10 rep.</p>
+                        </div>
+                        <div class="exercise-stat">
+                            <h5>Tiempo de descanso</h5>
+                            <p>0 min.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="calendar-section">
+            <h2>Calendario de Entrenamiento</h2>
+            <div class="calendar-header">
+                <button class="calendar-nav" id="prevMonth">&lt;</button>
+                <h3 id="currentMonth">Junio 2023</h3>
+                <button class="calendar-nav" id="nextMonth">&gt;</button>
+            </div>
+            <table class="calendar">
+                <thead>
+                    <tr>
+                        <th>Dom</th>
+                        <th>Lun</th>
+                        <th>Mar</th>
+                        <th>Mié</th>
+                        <th>Jue</th>
+                        <th>Vie</th>
+                        <th>Sáb</th>
+                    </tr>
+                </thead>
+                <tbody id="calendarBody">
+                    <!-- El cuerpo del calendario se llenará con JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 FitUMB. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Funcionalidad del sidebar
+        const toggleSidebar = document.querySelector('.toggle-sidebar');
+        const sidebar = document.querySelector('.sidebar');
+        const main = document.querySelector('main');
+
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Funcionalidad de los acordeones de ejercicios
+        const exerciseHeaders = document.querySelectorAll('.exercise-header');
+        exerciseHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+                header.querySelector('span').textContent = content.classList.contains('active') ? '▲' : '▼';
+            });
+        });
+
+        // Funcionalidad del calendario
+        const calendarBody = document.getElementById('calendarBody');
+        const currentMonthElement = document.getElementById('currentMonth');
+        const prevMonthButton = document.getElementById('prevMonth');
+        const nextMonthButton = document.getElementById('nextMonth');
+
+        let currentDate = new Date();
+
+        function generateCalendar(year, month) {
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+
+            currentMonthElement.textContent = `${firstDay.toLocaleString('default', { month: 'long' })} ${year}`;
+
+            let date = 1;
+            let calendarHTML = '';
+
+            for (let i = 0; i < 6; i++) {
+                let row = '<tr>';
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < startingDay) {
+                        row += '<td></td>';
+                    } else if (date > daysInMonth) {
+                        row += '<td></td>';
+                    } else {
+                        let className = '';
+                        if (date === currentDate.getDate() && month === currentDate.getMonth() && year === currentDate.getFullYear()) {
+                            className = 'today';
+                        } else if ((j === 2 || j === 5) && date <= daysInMonth) { // Martes y Viernes
+                            className = 'training-day';
+                        }
+                        row += `<td><div class="${className}">${date}</div></td>`;
+                        date++;
+                    }
+                }
+                row += '</tr>';
+                calendarHTML += row;
+                if (date > daysInMonth) {
+                    break;
+                }
+            }
+
+            calendarBody.innerHTML = calendarHTML;
+        }
+
+        generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+
+        prevMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        });
+
+        nextMonthButton.addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        });
+    </script>
+</body>
+</html>

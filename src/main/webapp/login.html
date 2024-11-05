@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FIT UMB</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- <link href="../CSS/style.css" rel="stylesheet"> -->
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #FFA500;
+            --accent-color: #FF6347;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --white: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            background-image: url('/placeholder.svg?height=1080&width=1920');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.5rem;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo {
+            width: 80px;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        .nav-links li {
+            margin: 0 1rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        .auth-buttons button {
+            padding: 0.4rem 0.8rem;
+            margin-left: 0.5rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .register {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        .register:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .login {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        .login:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4rem 2rem;
+        }
+        .welcome-message {
+            flex: 1;
+            max-width: 500px;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .welcome-message:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        .welcome-message h2 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .welcome-message p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+        .login-form {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .login-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .login-form h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+        }
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: #e5573d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 99, 71, 0.4);
+        }
+        footer {
+            background-color: var(--text-color);
+            color: var(--white);
+            text-align: center;
+            padding: 1rem;
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            main {
+                flex-direction: column;
+                padding: 2rem 1rem;
+            }
+            .welcome-message, .login-form {
+                max-width: 100%;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="home.html">
+                <img src="https://i.ibb.co/YpwCt1v/LOGOOO-1-removebg-preview.png" class="logo">
+            </a>
+            <div class="auth-buttons">
+                <button class="register">Registrarme</button>
+                <button class="login">Log In</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="welcome-message">
+            <h2>Es un gusto verte de nuevo</h2>
+            <p>Tu viaje hacia una vida más saludable y equilibrada continúa aquí. Cada paso que das es un logro, y estamos emocionados de acompañarte en este camino. ¡Bienvenido de vuelta a tu espacio de bienestar!</p>
+        </div>
+        <form class="login-form">
+            <h1>Iniciar Sesión</h1>
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit-btn">Iniciar Sesión</button>
+        </form>
+    </main>
+    <script>
+        // Redireccion a registro
+        const registerButton = document.querySelector('.register');
+        registerButton.addEventListener('click', () => {
+            window.location.href = 'registro.html';
+        });
+
+        // Redireccion a login
+        const loginButton = document.querySelector('.login');
+        loginButton.addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
+
+        const inicioSesionButton = document.querySelector('.submit-btn');
+        inicioSesionButton.addEventListener('click', () => {
+            window.location.href = 'nutricion.html';
+        });
+
+    </script>
+    <footer>
+        <p>&copy; 2023 FitUMB. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
